@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PDM - Atividade Live 06</string>
+
+    <string name="frame1">Llamar</string>
+    <string name="frame2">Sitio de FMM</string>
+    <string name="frame3">Abre mapa UFAM</string>
+    <string name="frame4">Abre mapa FMM</string>
+    <string name="frame5">Abre mapa SIDIA</string>
+    <string name="frame6">Enviar SMS</string>
+    <string name="frame7">Enviar Whatsapp</string>
+    <string name="frame8">Abrir Câmera</string>
+    <string name="frame9">Enviar Email</string>
+    <string name="frame10">Abre Ubicación</string>
+    <string name="frame11">Tomar foto</string>
+
+    <string name="number">Numero</string>
+    <string name="text">Texto</string>
+    <string name="address">Dirección de correo electrónico</string>
+    <string name="subject">Sujeto</string>
+    <string name="body">Cuerpo</string>
+
+    <string name="callMessage">Ingrese el número para llamar</string>
+    <string name="sendMessage">Ingrese el contenido del mensaje</string>
+    <string name="emailMessage">Ingrese el contenido del correo electrónico</string>
+
+    <string name="callButton">llamar</string>
+    <string name="sendButton">enviar</string>
+    <string name="cancelButton">cancelar</string>
+    <string name="backButton">Volver</string>
+
+    <string name="toastNotInstalled">Aplicación no instalada</string>
+    <string name="toastCompleteFields">Completa todos los campos</string>
+    <string name="toastCompleteField">Completa el campo</string>
+</resources>

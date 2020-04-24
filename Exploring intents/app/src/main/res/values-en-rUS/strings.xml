@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PDM - Atividade Live 06</string>
+
+    <string name="frame1">Call</string>
+    <string name="frame2">Site FMM</string>
+    <string name="frame3">Open map UFAM</string>
+    <string name="frame4">Open map FMM</string>
+    <string name="frame5">Open map SIDIA</string>
+    <string name="frame6">Send SMS</string>
+    <string name="frame7">Send Whatsapp</string>
+    <string name="frame8">Open Camera</string>
+    <string name="frame9">Send Email</string>
+    <string name="frame10">Open Location</string>
+    <string name="frame11">Take photo</string>
+
+    <string name="number">Number</string>
+    <string name="text">Text</string>
+    <string name="address">Email address</string>
+    <string name="subject">Subject</string>
+    <string name="body">Body</string>
+
+    <string name="callMessage">Insert a number to call</string>
+    <string name="sendMessage">Insert the message content</string>
+    <string name="emailMessage">Insert the email content</string>
+
+    <string name="callButton">call</string>
+    <string name="sendButton">send</string>
+    <string name="cancelButton">cancel</string>
+    <string name="backButton">Back</string>]
+
+    <string name="toastNotInstalled">Application not installed</string>
+    <string name="toastCompleteFields">Complete all the fields</string>
+    <string name="toastCompleteField">Complete the field</string>
+</resources>
