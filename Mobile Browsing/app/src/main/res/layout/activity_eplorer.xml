@@ -6,13 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".ExplorerActivity">
 
-    <include layout="@layout/activity_header"/>
+    <include layout="@layout/activity_header" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp">
 
-        <include layout="@layout/activity_footer"/>
+        <LinearLayout
+            android:background="#3ACD88"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="80dp">
+
+            <WebView
+                android:id="@+id/explorer_web_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <include layout="@layout/activity_footer" />
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
