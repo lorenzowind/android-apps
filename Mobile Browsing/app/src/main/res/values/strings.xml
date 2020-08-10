@@ -2,4 +2,5 @@
     <string name="app_name">Mobile Browsing</string>
     <string name="hint_header_input">Search a website…</string>
     <string name="content_description_header_search">Search</string>
+    <string name="content_description_header_favorite">Favorite</string>
 </resources>
