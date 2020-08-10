@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Mobile Browsing</string>
-    <string name="hint_header_input">Search a website…</string>
-    <string name="content_description_header_search">Search</string>
-    <string name="content_description_header_favorite">Favorite</string>
+    <string name="header_hint_search">Search a website…</string>
+    <string name="header_content_description_search">Search</string>
+    <string name="header_content_description_favorite">Favorite</string>
+    <string name="footer_text_explore">Explore</string>
+    <string name="footer_text_favorite">Favorites</string>
+    <string name="footer_text_history">History</string>
+    <string name="footer_content_description_explore">Explore</string>
 </resources>

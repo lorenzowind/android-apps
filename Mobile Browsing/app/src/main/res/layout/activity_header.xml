@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:ems="10"
-        android:hint="@string/hint_header_input"
+        android:hint="@string/header_hint_search"
         android:inputType="textPersonName"
         android:textColor="#001F43"
         android:layout_marginEnd="20dp"
@@ -31,13 +31,13 @@
         android:layout_weight="1"
         android:layout_marginEnd="20dp"
         app:srcCompat="@drawable/icon_search"
-        android:contentDescription="@string/content_description_header_search" />
+        android:contentDescription="@string/header_content_description_search" />
 
     <ImageView
         android:id="@+id/header_favorite"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_weight="1"
-        android:contentDescription="@string/content_description_header_favorite"
-        app:srcCompat="@drawable/icon_favorite" />
+        android:contentDescription="@string/header_content_description_favorite"
+        app:srcCompat="@drawable/icon_favorite_disabled" />
 </LinearLayout>
