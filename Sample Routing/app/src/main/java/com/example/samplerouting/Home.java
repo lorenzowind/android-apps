@@ -115,7 +115,7 @@ public class Home extends FragmentActivity implements OnMapReadyCallback {
 
                         current_marker = mMap.addMarker(new MarkerOptions()
                                 .position(current_coords)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_car)));
 
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current_coords, 5));
 
