@@ -119,8 +119,8 @@ public class Home extends FragmentActivity implements OnMapReadyCallback {
 
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current_coords, 5));
 
-                        if(!Double.toString(current_coords.latitude).substring(0, 5).equals(Double.toString(final_coords.latitude).substring(0, 5)) &&
-                                !Double.toString(current_coords.longitude).substring(0, 5).equals(Double.toString(final_coords.longitude).substring(0, 5))) {
+                        if(!Double.toString(current_coords.latitude).substring(0, 6).equals(Double.toString(final_coords.latitude).substring(0, 6)) &&
+                                !Double.toString(current_coords.longitude).substring(0, 6).equals(Double.toString(final_coords.longitude).substring(0, 6))) {
                             handler.postDelayed(this, 2000);
                             search_found = false;
                         } else {
