@@ -1,12 +1,13 @@
 package com.example.samplerouting;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
@@ -15,8 +16,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,79 +26,53 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.util.List;
+public class Passenger extends FragmentActivity implements OnMapReadyCallback {
 
-public class Home extends FragmentActivity implements OnMapReadyCallback {
-
-    Geocoder geocoder;
     GoogleMap mMap;
 
-    TextView textView;
-    ImageView imageView;
-    Button button;
+    Button simulate_button, passenger_back_button;
 
     boolean search_found = false;
 
     LatLng initial_coords, final_coords, current_coords;
-    Marker current_marker;
+
+    Marker current_marker, driver_marker = null;
+    MarkerOptions driver_marker_options;
 
     Double latitude_distance, longitude_distance;
+
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_passenger);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("markers");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.passenger_map);
         mapFragment.getMapAsync(this);
 
-        geocoder = new Geocoder(this);
+        simulate_button = findViewById(R.id.simulate_button);
+        passenger_back_button = findViewById(R.id.passenger_back_button);
 
-        textView = findViewById(R.id.search_text);
-        imageView = findViewById(R.id.search_icon);
-        button = findViewById(R.id.simulate_button);
-
-        imageView.setOnClickListener(new View.OnClickListener() {
+        passenger_back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!textView.getText().equals("")) {
-                    List<Address> addresses;
-                    try {
-                        addresses = geocoder.getFromLocationName(textView.getText().toString(), 1);
-
-                        if (addresses.size() > 0) {
-                            double latitude = addresses.get(0).getLatitude();
-                            double longitude = addresses.get(0).getLongitude();
-
-                            Toast.makeText(getApplicationContext(), addresses.get(0).getLocality(), Toast.LENGTH_LONG).show();
-
-                            final_coords =  new LatLng(latitude, longitude);
-
-                            latitude_distance = final_coords.latitude - current_coords.latitude;
-                            longitude_distance = final_coords.longitude - current_coords.longitude;
-
-                            mMap.addMarker(new MarkerOptions()
-                                    .position(final_coords)
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(final_coords, 14));
-
-                            search_found = true;
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Endereço não encontrado", Toast.LENGTH_LONG).show();
-                        }
-                    } catch (IOException e) {
-                        Toast.makeText(getApplicationContext(), "Ocorreu um erro", Toast.LENGTH_LONG).show();
-                    }
-                }
-
+                Intent intent = new Intent(getApplicationContext(), Menu.class);
+                startActivity(intent);
+                finish();
             }
         });
 
-        button.setOnClickListener(new View.OnClickListener() {
+        simulate_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Handler handler = new Handler(Looper.getMainLooper());
@@ -134,7 +107,7 @@ public class Home extends FragmentActivity implements OnMapReadyCallback {
                 if (search_found) {
                     handler.postDelayed(runnable, 2000);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Selecione um endereço válido", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Selecione um pin válido", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -166,5 +139,41 @@ public class Home extends FragmentActivity implements OnMapReadyCallback {
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(initial_coords, 14));
+
+        markersListener();
+    }
+
+    private void markersListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    double lat = (double) snapshot.child("driver").child("lat").getValue();
+                    double lng = (double) snapshot.child("driver").child("lng").getValue();
+
+                    LatLng driver_position = new LatLng(lat, lng);
+
+                    if (driver_marker != null) {
+                        driver_marker.remove();
+                    }
+
+                    driver_marker_options = new MarkerOptions();
+                    
+                    driver_marker_options
+                            .title("Posição atual do motorista")
+                            .position(driver_position)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+
+                    driver_marker = mMap.addMarker(driver_marker_options);
+
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(driver_position, 14));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "Ocorreu um erro", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

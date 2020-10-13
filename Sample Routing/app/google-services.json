@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "811671221904",
+    "firebase_url": "https://samplerouting.firebaseio.com",
+    "project_id": "samplerouting",
+    "storage_bucket": "samplerouting.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:811671221904:android:dac3c257f4a27f905a4a15",
+        "android_client_info": {
+          "package_name": "com.example.samplerouting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "811671221904-id589ikr8aq7au5898lmk19thc88v9q8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.samplerouting",
+            "certificate_hash": "247d73b60d70c9fb7a43b6a7cdbb2f942b97c06a"
+          }
+        },
+        {
+          "client_id": "811671221904-4p4cfnoqjp0jmkrujemd0nm1oek2dc7e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA-p-c-cW0EVvA73R2x8oYxKQp7Mb3nHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "811671221904-4p4cfnoqjp0jmkrujemd0nm1oek2dc7e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
