@@ -22,17 +22,18 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
-public class Driver extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
+public class Driver extends FragmentActivity implements OnMapReadyCallback {
 
     GoogleMap mMap;
 
-    Button add_button, driver_back_button;
+    Button driver_back_button;
 
     Marker current_marker = null;
     MarkerOptions current_marker_options;
@@ -44,16 +45,19 @@ public class Driver extends FragmentActivity implements OnMapReadyCallback, Goog
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver);
 
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("markers");
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.driver_map);
         mapFragment.getMapAsync(this);
 
-        add_button = findViewById(R.id.add_button);
         driver_back_button = findViewById(R.id.driver_back_button);
 
         driver_back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+
                 Intent intent = new Intent(getApplicationContext(), Menu.class);
                 startActivity(intent);
                 finish();
@@ -82,32 +86,35 @@ public class Driver extends FragmentActivity implements OnMapReadyCallback, Goog
         LatLng initial_coords = new LatLng(location.getLatitude(), location.getLongitude());
 
         mMap.addMarker(new MarkerOptions()
+                .title("Posição atual")
                 .position(initial_coords)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(initial_coords, 14));
-    }
 
-    @Override
-    public void onMapClick(LatLng latLng) {
-        if (current_marker != null) {
-            current_marker.remove();
-        }
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                if (current_marker != null) {
+                    current_marker.remove();
+                }
 
-        current_marker_options = new MarkerOptions();
+                current_marker_options = new MarkerOptions();
 
-        current_marker_options
-                .title("Posição atual")
-                .position(latLng)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                current_marker_options
+                        .title("Posição alternativa")
+                        .position(latLng)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
 
-        current_marker = mMap.addMarker(current_marker_options);
+                current_marker = mMap.addMarker(current_marker_options);
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("markers");
+                String driver_uid = FirebaseAuth.getInstance().getUid();
 
-        databaseReference.child("driver").child("lat").setValue(latLng.latitude);
-        databaseReference.child("driver").child("lng").setValue(latLng.longitude);
+                databaseReference.child(driver_uid).child("lat").setValue(latLng.latitude);
+                databaseReference.child(driver_uid).child("lng").setValue(latLng.longitude);
+            }
+        });
     }
 }

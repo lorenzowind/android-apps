@@ -21,25 +21,93 @@
         android:layout_marginHorizontal="30dp"
         android:layout_centerVertical="true">
 
-        <EditText
-            android:id="@+id/email_input"
+        <LinearLayout
+            android:id="@+id/signin_layout"
+            android:visibility="visible"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="Email"
-            android:layout_marginBottom="10dp"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerVertical="true">
 
-        <EditText
-            android:id="@+id/password_input"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="Senha"
-            android:layout_marginBottom="10dp"/>
+            <EditText
+                android:id="@+id/email_signin_input"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="Email"
+                android:layout_marginBottom="10dp"/>
 
-        <Button
-            android:id="@+id/login_button"
+            <EditText
+                android:id="@+id/password_signin_input"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:inputType="textPassword"
+                android:hint="Senha"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/signin_button"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Entrar"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/signup_layout"
+            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="Entrar"
-            android:layout_marginTop="10dp"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerVertical="true">
+
+            <EditText
+                android:id="@+id/name_signup_input"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="Nome"
+                android:layout_marginBottom="10dp"/>
+
+            <EditText
+                android:id="@+id/email_signup_input"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="Email"
+                android:layout_marginBottom="10dp"/>
+
+            <EditText
+                android:id="@+id/password_signup_input"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:inputType="textPassword"
+                android:hint="Senha"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/signup_button"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Criar"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/signin_context"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Já tem conta? Entre agora!"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:id="@+id/signup_context"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ainda não tem conta? Crie agora!"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_marginTop="20dp"/>
     </LinearLayout>
 </RelativeLayout>

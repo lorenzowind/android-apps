@@ -32,20 +32,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Passenger extends FragmentActivity implements OnMapReadyCallback {
 
     GoogleMap mMap;
 
-    Button simulate_button, passenger_back_button;
+    Button passenger_back_button;
 
-    boolean search_found = false;
+    LatLng passenger_coords;
 
-    LatLng initial_coords, final_coords, current_coords;
-
-    Marker current_marker, driver_marker = null;
+    List<Marker> driver_markers = null;
     MarkerOptions driver_marker_options;
-
-    Double latitude_distance, longitude_distance;
 
     DatabaseReference databaseReference;
 
@@ -55,12 +54,12 @@ public class Passenger extends FragmentActivity implements OnMapReadyCallback {
         setContentView(R.layout.activity_passenger);
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("markers");
+        driver_markers = new ArrayList<Marker>();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.passenger_map);
         mapFragment.getMapAsync(this);
 
-        simulate_button = findViewById(R.id.simulate_button);
         passenger_back_button = findViewById(R.id.passenger_back_button);
 
         passenger_back_button.setOnClickListener(new View.OnClickListener() {
@@ -69,46 +68,6 @@ public class Passenger extends FragmentActivity implements OnMapReadyCallback {
                 Intent intent = new Intent(getApplicationContext(), Menu.class);
                 startActivity(intent);
                 finish();
-            }
-        });
-
-        simulate_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Handler handler = new Handler(Looper.getMainLooper());
-
-                final Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!current_coords.equals(initial_coords)) {
-                            current_marker.remove();
-                        }
-
-                        current_coords = new LatLng(current_coords.latitude + (latitude_distance * 0.1), current_coords.longitude + (longitude_distance * 0.1));
-
-                        current_marker = mMap.addMarker(new MarkerOptions()
-                                .position(current_coords)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_car)));
-
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current_coords, 5));
-
-                        if(!Double.toString(current_coords.latitude).substring(0, 6).equals(Double.toString(final_coords.latitude).substring(0, 6)) &&
-                                !Double.toString(current_coords.longitude).substring(0, 6).equals(Double.toString(final_coords.longitude).substring(0, 6))) {
-                            handler.postDelayed(this, 2000);
-                            search_found = false;
-                        } else {
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current_coords, 14));
-
-                            Toast.makeText(getApplicationContext(), "Você chegou ao seu destino", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                };
-
-                if (search_found) {
-                    handler.postDelayed(runnable, 2000);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Selecione um pin válido", Toast.LENGTH_LONG).show();
-                }
             }
         });
     }
@@ -131,14 +90,14 @@ public class Passenger extends FragmentActivity implements OnMapReadyCallback {
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-        initial_coords = new LatLng(location.getLatitude(), location.getLongitude());
-        current_coords = initial_coords;
+        passenger_coords = new LatLng(location.getLatitude(), location.getLongitude());
 
         mMap.addMarker(new MarkerOptions()
-                .position(initial_coords)
+                .title("Posição atual")
+                .position(passenger_coords)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(initial_coords, 14));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(passenger_coords, 14));
 
         markersListener();
     }
@@ -148,25 +107,28 @@ public class Passenger extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    double lat = (double) snapshot.child("driver").child("lat").getValue();
-                    double lng = (double) snapshot.child("driver").child("lng").getValue();
-
-                    LatLng driver_position = new LatLng(lat, lng);
-
-                    if (driver_marker != null) {
-                        driver_marker.remove();
+                    for (Marker marker: driver_markers) {
+                        marker.remove();
                     }
 
-                    driver_marker_options = new MarkerOptions();
-                    
-                    driver_marker_options
-                            .title("Posição atual do motorista")
-                            .position(driver_position)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+                    for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
 
-                    driver_marker = mMap.addMarker(driver_marker_options);
+                        double lat = (double) dataSnapshot.child("lat").getValue();
+                        double lng = (double) dataSnapshot.child("lng").getValue();
 
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(driver_position, 14));
+                        LatLng driver_position = new LatLng(lat, lng);
+
+                        driver_marker_options = new MarkerOptions();
+
+                        driver_marker_options
+                                .title("Posição atual do motorista " + dataSnapshot.child("name").getValue())
+                                .position(driver_position)
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+
+                        Marker marker = mMap.addMarker(driver_marker_options);
+
+                        driver_markers.add(marker);
+                    }
                 }
             }
 
